@@ -27,7 +27,7 @@ const loginUser = async (req, res) => {
             const remainingTime = Math.ceil((user.lockUntil - Date.now()) / 60000);
             return res.status(403).json({
                 response: "error",
-                message: `Account is locked dur to too many login attempts. Please try again in ${remainingTime} minutes.`
+                message: `Account is locked due to too many login attempts. Please try again in ${remainingTime} minutes.`
             })
         }
 

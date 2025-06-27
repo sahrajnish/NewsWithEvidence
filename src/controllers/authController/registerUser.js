@@ -89,7 +89,7 @@ const registerUser = async (req, res) => {
         })
 
         return res.status(200).json({
-            response: "error",
+            response: "success",
             message: "Registration successful! Please check your email to verify your account."
         })
     } catch (error) {
