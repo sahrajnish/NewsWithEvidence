@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
     {
@@ -33,11 +34,33 @@ const userSchema = new mongoose.Schema(
         },
         emailVerificationTokenExpires: {
             type: Date
+        },
+        refreshToken: {
+            type: String
+        },
+        failedLoginAttempts: {
+            type: Number,
+            default: 0
+        },
+        lockUntil: {
+            type: Date
         }
     }, {
         timestamps: true
     }
 )
+
+userSchema.pre("save", async function (next) {
+    if(!this.isModified("personalDetails.password")) return next;
+
+    this.personalDetails.password = await bcrypt.hash(this.personalDetails.password, 12);
+
+    next();
+})
+
+userSchema.methods.isPasswordCorrect = async function (password) {
+    return bcrypt.compare(password, this.personalDetails.password);
+}
 
 const Users = mongoose.model("users", userSchema);
 
