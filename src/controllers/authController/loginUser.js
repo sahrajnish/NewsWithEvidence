@@ -31,6 +31,12 @@ const loginUser = async (req, res) => {
             })
         }
 
+        if(user && user.lockUntil && user.lockUntil < Date.now()) {
+            user.failedLoginAttempts = 0;
+            user.lockUntil = undefined;
+            await user.save({ validateBeforeSave: false });
+        }
+
         if (!user || !(await (user.isPasswordCorrect(password)))) {
             if (!user) {
                 return res.status(404).json({
