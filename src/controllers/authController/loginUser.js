@@ -2,7 +2,7 @@ import { LOCK_TIME, MAX_LOGIN_ATTEMPT } from "../../../constants/contants.js";
 import Users from "../../models/user.models.js";
 import jwt from "jsonwebtoken";
 
-const loginUser = async (req, res) => {
+const handleLoginUser = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -115,5 +115,5 @@ const loginUser = async (req, res) => {
 }
 
 export {
-    loginUser
+    handleLoginUser
 }

@@ -2,7 +2,7 @@ import Users from "../../models/user.models.js";
 import crypto from "crypto";
 import sendEmail from "../../utils/sendEmail.js";
 
-const registerUser = async (req, res) => {
+const handleRegisterUser = async (req, res) => {
     const { firstname, lastname, email, password, confirmPassword } = req.body;
 
     if(!firstname.trim() || !lastname.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
@@ -101,7 +101,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-const verifyEmail = async (req, res) => {
+const handleVerifyEmail = async (req, res) => {
     try {
         const hashedToken = crypto
             .createHash("sha256")
@@ -139,6 +139,6 @@ const verifyEmail = async (req, res) => {
 }
 
 export {
-    registerUser,
-    verifyEmail
+    handleRegisterUser,
+    handleVerifyEmail
 }
