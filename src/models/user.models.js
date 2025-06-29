@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
             },
             password: {
                 type: String,
-                required: true
+                required: false
             },
             mobileNumber: {
                 type: String
@@ -50,6 +50,11 @@ const userSchema = new mongoose.Schema(
         },
         passwordResetTokenExpires: {
             type: Date
+        },
+        googleId: {
+            type: String,
+            unique: true,
+            sparse: true
         }
     }, {
         timestamps: true
@@ -57,11 +62,14 @@ const userSchema = new mongoose.Schema(
 )
 
 userSchema.pre("save", async function (next) {
-    if(!this.isModified("personalDetails.password")) return next;
+    if(!this.personalDetails.password || !this.isModified("personalDetails.password")) return next;
 
-    this.personalDetails.password = await bcrypt.hash(this.personalDetails.password, 12);
-
-    next();
+    try {
+        this.personalDetails.password = await bcrypt.hash(this.personalDetails.password, 12);
+        next();
+    } catch (error) {
+        console.log(`Error from bcrypt save password ${error}`);
+    }
 })
 
 userSchema.methods.isPasswordCorrect = async function (password) {
