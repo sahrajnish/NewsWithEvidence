@@ -11,12 +11,13 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try {
+        console.log(req.session);
         const user = await Users.findById(id);
         done(null, user);
     } catch (error) {
         done(error, null);
     }
-})
+})  
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -25,6 +26,7 @@ passport.use(new GoogleStrategy({
 },
     async function (accessToken, refreshToken, profile, done) {
         try {
+            console.log(profile);
             const email = profile.emails[0].value;
 
             let user = await Users.findOne({ googleId: profile.id });

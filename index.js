@@ -34,6 +34,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/', (req, res) => {
+    res.send(
+        "<h1>Hello</h1>"
+    )
+})
 app.use('/api/auth', authRouter);
 
 app.listen(PORT, () => console.log(`Server started on PORT: ${PORT}`));
